@@ -1,2 +1,25 @@
 /ERD.pdf
 /Hybrid Monitoring Platform.docx
+dist
+
+# dependencies
+node_modules/
+
+# env files
+.env
+.env.*
+
+# prisma generated files (ถ้ามี custom output)
+prisma/generated/
+
+# logs
+logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
