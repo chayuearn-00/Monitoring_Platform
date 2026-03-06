@@ -7,23 +7,35 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model buildings {
-  building_id Int        @id @default(autoincrement())
-  building    String     @db.VarChar(20)
-  is_active   Boolean?   @default(true)
-  stations    stations[]
+model locations {
+  location_id     Int         @id @default(autoincrement())
+  country_name    String      @db.VarChar(20) 
+  province_name   String      @db.VarChar(20) 
+  building_name   String      @db.VarChar(20) 
+  details  details[]
+
+  @@map("locations")
 }
 
-model countries {
-  country_id Int         @id @default(autoincrement())
-  country    String      @db.VarChar(20)
-  locations  locations[]
+model details {
+  detail_id   Int      @id @default(autoincrement())
+  location_id Int
+  floor_id    Int
+  hardware_id Int
+
+  // Relationships
+  location    locations @relation(fields: [location_id], references: [location_id])
+  floor       floors    @relation(fields: [floor_id], references: [floor_id])
+  hardware    hardware @relation(fields: [hardware_id], references: [hardware_id])
+  
+  monitor_logs monitor_logs[]
 }
 
 model current_status {
   hardware_id Int            @id
   status      machine_status
   start_time  DateTime       @db.Timestamp(6)
+
   hardware    hardware       @relation(fields: [hardware_id], references: [hardware_id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([hardware_id], map: "idx_status_hardware")
@@ -31,73 +43,54 @@ model current_status {
 
 model devices {
   device_id Int        @id @default(autoincrement())
-  device    String     @db.VarChar(30)
-  is_active Boolean?   @default(true)
+  device_name    String     @db.VarChar(30) @unique
+
   hardware  hardware[]
 }
 
 model hardware {
   hardware_id    Int             @id @default(autoincrement())
-  station_id     Int
   machine_id     Int
   device_id      Int
-  current_status current_status?
-  devices        devices         @relation(fields: [device_id], references: [device_id], onDelete: NoAction, onUpdate: NoAction)
-  machines       machines        @relation(fields: [machine_id], references: [machine_id], onDelete: NoAction, onUpdate: NoAction)
-  stations       stations        @relation(fields: [station_id], references: [station_id], onDelete: NoAction, onUpdate: NoAction)
-  monitor_logs   monitor_logs[]
-}
 
-model locations {
-  location_id Int       @id @default(autoincrement())
-  country_id  Int
-  province_id Int
-  countries   countries @relation(fields: [country_id], references: [country_id], onDelete: NoAction, onUpdate: NoAction)
-  provinces   provinces @relation(fields: [province_id], references: [province_id], onDelete: NoAction, onUpdate: NoAction)
+  devices        devices         @relation(fields: [device_id], references: [device_id], onDelete: NoAction, onUpdate: NoAction)
+  machine       machines        @relation(fields: [machine_id], references: [machine_id], onDelete: NoAction, onUpdate: NoAction)
+  
+  detail   details[]
+
+  current_status current_status?
 }
 
 model machines {
   machine_id Int        @id @default(autoincrement())
-  machine    String     @db.VarChar(50)
-  is_active  Boolean?   @default(true)
+  machine_name    String     @db.VarChar(50) @unique
   hardware   hardware[]
 }
 
 model monitor_logs {
   log_id           Int            @id @default(autoincrement())
-  hardware_id      Int
+  detail_id      Int
   start_time       DateTime       @db.Timestamp(6)
   end_time         DateTime       @db.Timestamp(6)
   duration_seconds Int
   status           machine_status
-  hardware         hardware       @relation(fields: [hardware_id], references: [hardware_id], onDelete: NoAction, onUpdate: NoAction)
+  detail         details          @relation(fields: [detail_id], references: [detail_id], onDelete: NoAction, onUpdate: NoAction)
 
-  @@index([hardware_id], map: "idx_logs_hardware")
   @@index([start_time], map: "idx_logs_start_time")
 }
 
-model provinces {
-  province_id Int         @id @default(autoincrement())
-  province    String      @db.VarChar(20)
-  is_active   Boolean?    @default(true)
-  locations   locations[]
-}
-
-model stations {
-  station_id  Int        @id @default(autoincrement())
-  building_id Int
-  floor       String?    @db.VarChar(3)
-  zone_id     Int
-  hardware    hardware[]
-  buildings   buildings  @relation(fields: [building_id], references: [building_id], onDelete: NoAction, onUpdate: NoAction)
-  zones       zones      @relation(fields: [zone_id], references: [zone_id], onDelete: NoAction, onUpdate: NoAction)
+model floors {
+  floor_id  Int        @id @default(autoincrement())
+  floor_name       String?    @db.VarChar(3) @unique
+  zones     zones[]
+  details   details[]
 }
 
 model zones {
   zone_id   Int        @id @default(autoincrement())
-  zone      String     @db.VarChar(10)
+  zone_name      String     @db.VarChar(20) @unique
   is_active Boolean?   @default(true)
-  stations  stations[]
+  floors    floors[]
 }
 
 enum machine_status {
