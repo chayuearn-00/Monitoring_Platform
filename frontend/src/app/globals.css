@@ -29,7 +29,7 @@ body {
 
 @layer utilities {
   .container {
-    @apply max-w-screen py-15 px-[100px];
+    @apply max-w-screen py-15 px-[100px] h-screen overflow-hidden;
   }
   .card {
     @apply flex flex-col bg-foreground px-20 py-12 rounded-3xl w-full gap-8 shadow-md border border-gray-300
@@ -41,7 +41,15 @@ body {
     @apply text-heading font-bold;
   }
   .button {
-    @apply  shadow-md px-12 py-4 rounded-2xl text-2xl
+    @apply shadow-md px-12 py-4 rounded-2xl text-2xl
   }
-
+  .log-card {
+    @apply flex flex-col bg-foreground rounded-3xl w-full gap-8 shadow-md border border-gray-300
+  }
+  .normal-text {
+    @apply font-normal text-2xl
+  }
+  .bond-text {
+    @apply font-bold text-2xl
+  }
 }
