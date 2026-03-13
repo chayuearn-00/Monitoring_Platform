@@ -37,5 +37,4 @@ const devices = [
     { id: 5, name: "Fan", zone: "Workshop_C", station: "A", location: "Thailand", status: "Running" },
     { id: 6, name: "Fan", zone: "Workshop_C", station: "A", location: "Thailand", status: "Running" },
     { id: 7, name: "Fan", zone: "Workshop_C", station: "A", location: "Thailand", status: "Running" },
-    
 ];
