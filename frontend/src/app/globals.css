@@ -32,7 +32,7 @@ body {
     @apply max-w-screen py-15 px-[100px] h-screen overflow-hidden;
   }
   .card {
-    @apply flex flex-col bg-foreground px-20 py-12 rounded-3xl w-full gap-8 shadow-md border border-gray-300
+    @apply flex bg-foreground px-20 py-12 rounded-3xl w-full gap-8 shadow-md border border-gray-300
   }
   .search-box {
     @apply flex place-content-between h-13 items-center font-extralight text-gray-400 text-xl border  px-10 py-2 rounded-2xl cursor-pointer

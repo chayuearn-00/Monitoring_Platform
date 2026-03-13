@@ -2,14 +2,14 @@ import DropDown from "@icons/DropDown.svg";
 import Search from "@icons/Search.svg";
 import Add from "@icons/Add.svg";
 import Image from "next/image";
-import { useState } from "react";
+// import { useState } from "react";
 
 
 export default function SearchCard() {
-    const [zone,setZone] = useState("Zone");
+    // const [zone,setZone] = useState("Zone");
 
     return (
-        <div className="card">
+        <div className="card flex-col">
             <div className="flex w-full gap-10">
                 <input 
                     className="search-box w-[300px]" 
