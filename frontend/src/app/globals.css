@@ -14,13 +14,13 @@
   --text-heading: 64px;
 
 }
-/* 
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #181D27;
     --foreground: #ededed;
   }
-} */
+}
 
 body {
   background: var(--background);
@@ -35,13 +35,13 @@ body {
     @apply flex flex-col bg-foreground px-20 py-12 rounded-3xl w-full gap-8 shadow-md border border-gray-300
   }
   .search-box {
-    @apply flex place-content-between h-13 items-center font-extralight text-gray-400 text-xl border  px-10 py-2 rounded-2xl
+    @apply flex place-content-between h-13 items-center font-extralight text-gray-400 text-xl border  px-10 py-2 rounded-2xl cursor-pointer
   }
   .header {
     @apply text-heading font-bold;
   }
   .button {
-    @apply shadow-md px-12 py-4 rounded-2xl text-2xl
+    @apply shadow-md px-12 py-4 rounded-2xl text-2xl cursor-pointer
   }
   .log-card {
     @apply flex flex-col bg-foreground rounded-3xl w-full gap-8 shadow-md border border-gray-300
