@@ -55,4 +55,7 @@ body {
   .icon {
     @apply w-16 h-16 self-center inset-0 flex items-center justify-center
   }
+  .input {
+    @apply w-full h-16 border border-gray-300 rounded-2xl px-5 py-2
+  }
 }
