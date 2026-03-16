@@ -29,7 +29,7 @@ body {
 
 @layer utilities {
   .container {
-    @apply max-w-screen py-15 px-[100px] h-screen overflow-hidden;
+    @apply max-w-screen py-15 h-screen overflow-hidden;
   }
   .card {
     @apply flex bg-foreground px-20 py-12 rounded-3xl w-full gap-8 shadow-md border border-gray-300
@@ -51,5 +51,8 @@ body {
   }
   .bond-text {
     @apply font-bold text-2xl
+  }
+  .icon {
+    @apply w-16 h-16 self-center inset-0 flex items-center justify-center
   }
 }
