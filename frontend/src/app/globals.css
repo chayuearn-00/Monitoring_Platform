@@ -12,6 +12,11 @@
   --text-primary: #0A0D12;
   --color-secondary: #666666;
   --color-success: #12B76A;
+  --text-Running: #12B76A;
+  --color-warning: #F79009;
+  --text-warning: #F79009;
+  --color-down: #717680;
+  --text-down: #717680;
   --text-heading: 64px;
 
 }
