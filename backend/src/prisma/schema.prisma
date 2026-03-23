@@ -8,89 +8,86 @@ datasource db {
 }
 
 model locations {
-  location_id     Int         @id @default(autoincrement())
-  country_name    String      @db.VarChar(20) 
-  province_name   String      @db.VarChar(20) 
-  building_name   String      @db.VarChar(20) 
-  details  details[]
+  location_id   Int       @id @default(autoincrement())
+  country_name  String    @db.VarChar(20)
+  province_name String    @db.VarChar(20)
+  building_name String    @db.VarChar(20)
+  details       details[]
 
   @@map("locations")
+  @@unique([country_name, province_name, building_name])
 }
 
 model details {
-  detail_id   Int      @id @default(autoincrement())
-  location_id Int
-  floor_id    Int
-  hardware_id Int
-
-  // Relationships
-  location    locations @relation(fields: [location_id], references: [location_id])
-  floor       floors    @relation(fields: [floor_id], references: [floor_id])
-  hardware    hardware @relation(fields: [hardware_id], references: [hardware_id])
-  
+  detail_id    Int            @id @default(autoincrement())
+  location_id  Int
+  zone_id      Int
+  floor_id     Int
+  hardware_id  Int
+  floors       floors         @relation(fields: [floor_id], references: [floor_id])
+  hardware     hardware       @relation(fields: [hardware_id], references: [hardware_id])
+  location     locations      @relation(fields: [location_id], references: [location_id])
+  zones        zones          @relation(fields: [zone_id], references: [zone_id])
   monitor_logs monitor_logs[]
+  current_status current_status[]
 }
 
 model current_status {
-  hardware_id Int            @id
+  detail_id   Int            @id
   status      machine_status
   start_time  DateTime       @db.Timestamp(6)
+  details     details        @relation(fields: [detail_id], references: [detail_id], onDelete: NoAction, onUpdate: NoAction)
 
-  hardware    hardware       @relation(fields: [hardware_id], references: [hardware_id], onDelete: NoAction, onUpdate: NoAction)
-
-  @@index([hardware_id], map: "idx_status_hardware")
+  @@index([detail_id], map: "idx_status_detail")
 }
 
 model devices {
-  device_id Int        @id @default(autoincrement())
-  device_name    String     @db.VarChar(30) @unique
-
-  hardware  hardware[]
+  device_id   Int        @id @default(autoincrement())
+  device_name String     @unique @db.VarChar(30)
+  hardware    hardware[]
 }
 
 model hardware {
   hardware_id    Int             @id @default(autoincrement())
   machine_id     Int
   device_id      Int
-
+  detail         details[]
   devices        devices         @relation(fields: [device_id], references: [device_id], onDelete: NoAction, onUpdate: NoAction)
-  machine       machines        @relation(fields: [machine_id], references: [machine_id], onDelete: NoAction, onUpdate: NoAction)
-  
-  detail   details[]
+  machine        machines        @relation(fields: [machine_id], references: [machine_id], onDelete: NoAction, onUpdate: NoAction)
 
-  current_status current_status?
+  @@unique([machine_id, device_id])
 }
 
 model machines {
-  machine_id Int        @id @default(autoincrement())
-  machine_name    String     @db.VarChar(50) @unique
-  hardware   hardware[]
+  machine_id   Int        @id @default(autoincrement())
+  machine_name String     @unique @db.VarChar(50)
+  hardware     hardware[]
 }
 
 model monitor_logs {
   log_id           Int            @id @default(autoincrement())
-  detail_id      Int
+  detail_id        Int
   start_time       DateTime       @db.Timestamp(6)
-  end_time         DateTime       @db.Timestamp(6)
-  duration_seconds Int
+  end_time         DateTime?      @db.Timestamp(6)
+  duration_seconds Int?           
   status           machine_status
-  detail         details          @relation(fields: [detail_id], references: [detail_id], onDelete: NoAction, onUpdate: NoAction)
+  
+  detail           details        @relation(fields: [detail_id], references: [detail_id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([start_time], map: "idx_logs_start_time")
 }
 
 model floors {
-  floor_id  Int        @id @default(autoincrement())
-  floor_name       String?    @db.VarChar(3) @unique
-  zones     zones[]
-  details   details[]
+  floor_id   Int       @id @default(autoincrement())
+  floor_name String?   @unique @db.VarChar(3)
+  details    details[]
 }
 
 model zones {
-  zone_id   Int        @id @default(autoincrement())
-  zone_name      String     @db.VarChar(20) @unique
-  is_active Boolean?   @default(true)
-  floors    floors[]
+  zone_id   Int       @id @default(autoincrement())
+  zone_name String    @unique @db.VarChar(20)
+  is_active Boolean?  @default(true)
+  details   details[]
 }
 
 enum machine_status {

@@ -1,20 +1,21 @@
+require('dotenv').config();
 const { PrismaClient } = require("@prisma/client")
 
 const prisma = new PrismaClient()
 
 async function main() {
-  await prisma.locations.createMany({
-    data: [
-      { country_name: "Thailand", province_name: "Bangkok", building_name: "Parking" },
-      { country_name: "Thailand", province_name: "Bangkok", building_name: "1" },
-      { country_name: "Thailand", province_name: "Bangkok", building_name: "2" },
-      { country_name: "Thailand", province_name: "Bangkok", building_name: "3" },
-      { country_name: "Thailand", province_name: "ChiangMai", building_name: "1" },
-      { country_name: "Japan", province_name: "Tokyo", building_name: "1"},
-      { country_name: "Australia", province_name: "Melbourne", building_name: "1"}
-    ],
-    skipDuplicates: true
-  });
+    await prisma.locations.createMany({
+        data: [
+        { country_name: "Thailand", province_name: "Bangkok", building_name: "Parking" },
+        { country_name: "Thailand", province_name: "Bangkok", building_name: "1" },
+        { country_name: "Thailand", province_name: "Bangkok", building_name: "2" },
+        { country_name: "Thailand", province_name: "Bangkok", building_name: "3" },
+        { country_name: "Thailand", province_name: "ChiangMai", building_name: "1" },
+        { country_name: "Japan", province_name: "Tokyo", building_name: "1"},
+        { country_name: "Australia", province_name: "Melbourne", building_name: "1"}
+        ],
+        skipDuplicates: true
+    });
 
     await prisma.machines.createMany({
         data: [
@@ -28,48 +29,6 @@ async function main() {
             {machine_name: "CoolingTower"},
         ],
         skipDuplicates: true
-    });
-
-    const restroom = await prisma.zones.upsert({
-        where: { zone_name: "Restroom" },
-        update: {},
-        create: { zone_name: "Restroom", is_active: true }
-    });
-
-    const parking = await prisma.zones.upsert({
-        where: { zone_name: "Parking" },
-        update: {},
-        create: { zone_name: "Parking", is_active: true }
-    });
-
-    const lobby = await prisma.zones.upsert({
-        where: { zone_name: "Lobby" },
-        update: {},
-        create: { zone_name: "Lobby", is_active: true }
-    });
-
-    const cafe = await prisma.zones.upsert({
-        where: { zone_name: "Cafe" },
-        update: {},
-        create: { zone_name: "Cafe", is_active: true }
-    });
-
-    const workshopA = await prisma.zones.upsert({
-        where: { zone_name: "WorkshopA" },
-        update: {},
-        create: { zone_name: "WorkshopA", is_active: true }
-    });
-
-    const workshopB = await prisma.zones.upsert({
-        where: { zone_name: "WorkshopB" },
-        update: {},
-        create: { zone_name: "WorkshopB", is_active: true }
-    });
-
-    const canteen = await prisma.zones.upsert({
-        where: { zone_name: "Canteen" },
-        update: {},
-        create: { zone_name: "Canteen", is_active: true }
     });
 
     // Create floors
@@ -114,6 +73,48 @@ async function main() {
         where: { device_name: "Sensor2" },
         update: {},
         create: { device_name: "Sensor2" }
+    });
+
+     const restroom = await prisma.zones.upsert({
+        where: { zone_name: "Restroom" },
+        update: {},
+        create: { zone_name: "Restroom", is_active: true }
+    });
+
+    const parking = await prisma.zones.upsert({
+        where: { zone_name: "Parking" },
+        update: {},
+        create: { zone_name: "Parking", is_active: true }
+    });
+
+    const lobby = await prisma.zones.upsert({
+        where: { zone_name: "Lobby" },
+        update: {},
+        create: { zone_name: "Lobby", is_active: true }
+    });
+
+    const cafe = await prisma.zones.upsert({
+        where: { zone_name: "Cafe" },
+        update: {},
+        create: { zone_name: "Cafe", is_active: true }
+    });
+
+    const workshopA = await prisma.zones.upsert({
+        where: { zone_name: "WorkshopA" },
+        update: {},
+        create: { zone_name: "WorkshopA", is_active: true }
+    });
+
+    const workshopB = await prisma.zones.upsert({
+        where: { zone_name: "WorkshopB" },
+        update: {},
+        create: { zone_name: "WorkshopB", is_active: true }
+    });
+
+    const canteen = await prisma.zones.upsert({
+        where: { zone_name: "Canteen" },
+        update: {},
+        create: { zone_name: "Canteen", is_active: true }
     });
 
     // Get existing machines (assuming they were created earlier)
@@ -218,134 +219,277 @@ async function main() {
     if (!location1 || !floor1) {
         console.log("Location or floor not found. Make sure they are seeded first.");
         return;
-    }
+    };
 
     // Create details
     await prisma.details.createMany({
         data: [
             {
             location_id: location1.location_id,
-            floor_id: floor1.floor_id,
-            hardware_id: hardware1.hardware_id
-            },
-            {
-            location_id: location1.location_id,
-            floor_id: floor1.floor_id,
-            hardware_id: hardware2.hardware_id
-            },
-            {
-            location_id: location1.location_id,
-            floor_id: floor1.floor_id,
-            hardware_id: hardware3.hardware_id
-            },
-            {
-            location_id: location1.location_id,
-            floor_id: floor1.floor_id,
-            hardware_id: hardware4.hardware_id
-            },
-            {
-            location_id: location1.location_id,
+            zone_id: workshopA.zone_id,
             floor_id: floor2.floor_id,
             hardware_id: hardware1.hardware_id
             },
             {
             location_id: location1.location_id,
+            zone_id: workshopA.zone_id,
+            floor_id: floor3.floor_id,
+            hardware_id: hardware1.hardware_id
+            },
+
+            {
+            location_id: location1.location_id,
+            zone_id: workshopA.zone_id,
             floor_id: floor2.floor_id,
             hardware_id: hardware2.hardware_id
             },
             {
             location_id: location1.location_id,
+            zone_id: workshopA.zone_id,
+            floor_id: floor3.floor_id,
+            hardware_id: hardware2.hardware_id
+            },
+
+            {
+            location_id: location1.location_id,
+            zone_id: workshopA.zone_id,
             floor_id: floor2.floor_id,
             hardware_id: hardware3.hardware_id
             },
             {
             location_id: location1.location_id,
+            zone_id: workshopA.zone_id,
+            floor_id: floor3.floor_id,
+            hardware_id: hardware3.hardware_id
+            },
+
+            {
+            location_id: location1.location_id,
+            zone_id: workshopA.zone_id,
             floor_id: floor2.floor_id,
             hardware_id: hardware4.hardware_id
             },
             {
             location_id: location1.location_id,
+            zone_id: workshopA.zone_id,
+            floor_id: floor3.floor_id,
+            hardware_id: hardware4.hardware_id
+            },
+
+            {
+            location_id: location1.location_id,
+            zone_id: workshopB.zone_id,
+            floor_id: floor2.floor_id,
+            hardware_id: hardware1.hardware_id
+            },
+            {
+            location_id: location1.location_id,
+            zone_id: workshopB.zone_id,
+            floor_id: floor3.floor_id,
+            hardware_id: hardware1.hardware_id
+            },
+
+            {
+            location_id: location1.location_id,
+            zone_id: workshopB.zone_id,
+            floor_id: floor2.floor_id,
+            hardware_id: hardware2.hardware_id
+            },
+            {
+            location_id: location1.location_id,
+            zone_id: workshopB.zone_id,
+            floor_id: floor3.floor_id,
+            hardware_id: hardware2.hardware_id
+            },
+
+            {
+            location_id: location1.location_id,
+            zone_id: workshopB.zone_id,
+            floor_id: floor2.floor_id,
+            hardware_id: hardware3.hardware_id
+            },
+            {
+            location_id: location1.location_id,
+            zone_id: workshopB.zone_id,
+            floor_id: floor3.floor_id,
+            hardware_id: hardware3.hardware_id
+            },
+
+            {
+            location_id: location1.location_id,
+            zone_id: workshopB.zone_id,
+            floor_id: floor2.floor_id,
+            hardware_id: hardware4.hardware_id
+            },
+            {
+            location_id: location1.location_id,
+            zone_id: workshopB.zone_id,
+            floor_id: floor3.floor_id,
+            hardware_id: hardware4.hardware_id
+            },
+
+            {
+            location_id: location1.location_id,
+            zone_id: workshopB.zone_id,
             floor_id: floor2.floor_id,
             hardware_id: hardware5.hardware_id
             },
             {
             location_id: location1.location_id,
+            zone_id: workshopB.zone_id,
+            floor_id: floor3.floor_id,
+            hardware_id: hardware5.hardware_id
+            },
+
+            {
+            location_id: location1.location_id,
+            zone_id: workshopB.zone_id,
             floor_id: floor2.floor_id,
             hardware_id: hardware6.hardware_id
             },
             {
             location_id: location1.location_id,
+            zone_id: workshopB.zone_id,
+            floor_id: floor3.floor_id,
+            hardware_id: hardware6.hardware_id
+            },
+
+            {
+            location_id: location1.location_id,
+            zone_id: workshopA.zone_id,
             floor_id: floor2.floor_id,
             hardware_id: hardware7.hardware_id
             },
             {
             location_id: location1.location_id,
+            zone_id: workshopA.zone_id,
+            floor_id: floor3.floor_id,
+            hardware_id: hardware7.hardware_id
+            },
+
+            {
+            location_id: location1.location_id,
+            zone_id: workshopA.zone_id,
             floor_id: floor2.floor_id,
             hardware_id: hardware8.hardware_id
             },
+            {
+            location_id: location1.location_id,
+            zone_id: workshopA.zone_id,
+            floor_id: floor3.floor_id,
+            hardware_id: hardware8.hardware_id
+            }
     ]});
 
     console.log("Details created successfully!");
 
+    await prisma.zones.update({
+        where: { zone_name: "Restroom" },
+        data: {
+            is_active: true,
+        }
+    });
+
+    await prisma.zones.update({
+        where: { zone_name: "Parking" },
+        data: {
+            is_active: true,
+        }
+    });
+
+    await prisma.zones.update({
+        where: { zone_name: "Lobby" },
+        data: {
+            is_active: true,
+        }
+    });
+
+    await prisma.zones.update({
+        where: { zone_name: "Cafe" },
+        data: {
+            is_active: true,
+        }
+    });
+
+    await prisma.zones.update({
+        where: { zone_name: "WorkshopA" },
+        data: {
+            is_active: true,
+        }
+    });
+
+    await prisma.zones.update({
+        where: { zone_name: "WorkshopB"},
+        data:{
+            is_active: true,
+        }
+    })
+
+    await prisma.zones.update({
+        where: { zone_name: "Canteen" },
+        data: {
+            is_active: true,}
+    })
+
     // Connect floors to zones (many-to-many)
-    await prisma.floors.update({
-        where: { floor_name: "M1" },
-        data: {
-            zones: {
-                connect: [
-                    { zone_id: restroom.zone_id },
-                    { zone_id: parking.zone_id }
-                ]
-            }
-        }
-    });
+//     await prisma.floors.update({
+//         where: { floor_name: "M1" },
+//         data: {
+//             zones: {
+//                 connect: [
+//                     { zone_id: restroom.zone_id },
+//                     { zone_id: parking.zone_id }
+//                 ]
+//             }
+//         }
+//     });
 
-    await prisma.floors.update({
-        where: { floor_name: "G" },
-        data: {
-            zones: {
-                connect: [
-                    { zone_id: lobby.zone_id },
-                    { zone_id: cafe.zone_id }
-                ]
-            }
-        }
-    });
+//     await prisma.floors.update({
+//         where: { floor_name: "G" },
+//         data: {
+//             zones: {
+//                 connect: [
+//                     { zone_id: lobby.zone_id },
+//                     { zone_id: cafe.zone_id }
+//                 ]
+//             }
+//         }
+//     });
 
-    await prisma.floors.update({
-        where: { floor_name: "1" },
-        data: {
-            zones: {
-                connect: [
-                    { zone_id: workshopA.zone_id },
-                    { zone_id: workshopB.zone_id },
-                    { zone_id: canteen.zone_id }
-                ]
-            }
-        }
-    });
+//     await prisma.floors.update({
+//         where: { floor_name: "1" },
+//         data: {
+//             zones: {
+//                 connect: [
+//                     { zone_id: workshopA.zone_id },
+//                     { zone_id: workshopB.zone_id },
+//                     { zone_id: canteen.zone_id }
+//                 ]
+//             }
+//         }
+//     });
 
-    await prisma.floors.update({
-        where: { floor_name: "2" },
-        data: {
-            zones: {
-                connect: [
-                    { zone_id: restroom.zone_id }
-                ]
-            }
-        }
-    });
+//     await prisma.floors.update({
+//         where: { floor_name: "2" },
+//         data: {
+//             zones: {
+//                 connect: [
+//                     { zone_id: restroom.zone_id }
+//                 ]
+//             }
+//         }
+//     });
 
-    await prisma.floors.update({
-        where: { floor_name: "3" },
-        data: {
-            zones: {
-                connect: [
-                    { zone_id: restroom.zone_id }
-                ]
-            }
-        }
-    });
+//     await prisma.floors.update({
+//         where: { floor_name: "3" },
+//         data: {
+//             zones: {
+//                 connect: [
+//                     { zone_id: restroom.zone_id }
+//                 ]
+//             }
+//         }
+//     });
 
 }
 
