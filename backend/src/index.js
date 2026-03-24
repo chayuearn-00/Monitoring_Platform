@@ -36,15 +36,16 @@ app.get("/data/all", async (req,res) => {
 
 app.get("/data/search", async (req, res) => {
   try {
-    const result = await prisma.$queryRaw`
-      SELECT get_topic_search()::json;
-    `;
-
+    // รับค่าจาก Query String เช่น /api/search?floor=Floor 1&zone=Workshop_A
+    const filters = req.query; 
+    
+    const results = await searchDevices(filters);
+    
+    res.json(results);
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch topic details"})
+    res.status(500).json({ error: "Search failed", message: error.message });
   }
-}
-)
+})
 
 app.get('/users', async (req, res) => {
   try {
